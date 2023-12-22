@@ -1,0 +1,12 @@
+﻿
+aiogram==2.24
+
+asyncio
+
+requests==2.28.1
+
+Streamlit == 1.19.0
+
+APScheduler==3.9.1
+
+bs4
