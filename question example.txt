@@ -1,0 +1,32 @@
+[{'category': 'Entertainment%3A%20Video%20Games', 'type': 'multiple', 'difficulty': 'medium', 'question': 'What%20is%20the%20browser%20game%20Kantai%20Collection%20heavily%20inspired%20by%3F', 'correct_answer': 'Second%20World%20War', 'incorrect_answers': ['Manga', 'World%20of%20Warcraft', 'An%20Anime']}]
+
+        for j in self.players_list: # This for loop will send a message to all players letting them know of the game rules
+            await self.bot.edit_message_text(functions.rule(self.len_users),str(j),self.message_ids[str(j)],parse_mode="HTML")
+            await asyncio.sleep(10)
+            for i in range(5):
+                if i == 1:
+                    self.choosen_option = random.choice(self.options)
+                    self.dictionary = self.game_info[0]
+                    self.users_choice[self.choosen_option][j] = self.dictionary['incorrect_answers'][0]
+                    exec(f"{self.choosen_option} = '{self.dictionary['incorrect_answers'][0]}'")
+                    self.options.remove(self.choosen_option)
+                elif i == 2:
+                    self.choosen_option = random.choice(self.options)
+                    self.dictionary = self.game_info [0]
+                    self.users_choice[self.choosen_option][j] = self.dictionary['incorrect_answers'][1]
+                    exec(f"{self.choosen_option} = '{self.dictionary['incorrect_answers'][1]}'")
+                    self.options.remove(self.choosen_option)
+                elif i == 3:
+                    self.choosen_option = random.choice(self.options)
+                    self.dictionary = self.game_info[0]
+                    self.users_choice[self.choosen_option][j] = self.dictionary['incorrect_answers'][2]
+                    exec(f"{self.choosen_option} = '{self.dictionary['incorrect_answers'][2]}'")
+                    self.options.remove(self.choosen_option)
+                elif i == 4:
+                    self.choosen_option = self.options[0]
+                    self.dictionary = self.game_info[0]
+                    self.users_choice[self.choosen_option][j] = self.dictionary['correct_answer'][0]
+                    exec(f"{self.choosen_option} = '{self.dictionary['correct_answer'][0]}'")
+                    self.options.remove(self.choosen_option)
+                else:
+                    pass
