@@ -33,7 +33,7 @@ class ElimWaitingRoom:
         self.plyrs_list = copy.deepcopy(self.players_list)
         self.plyrs_dict = copy.deepcopy(self.players_dict)
         self.elim_waitingroom = elim_waitingroom
-        variables.pause = True  
+        variables.elim_pause = True  
         for i in self.players_list:
             variables.elim_vote[int(i)] = False
         variables.elim_contvar = False # this will allow the waiting room to be open to another set of players to play a game in the bot

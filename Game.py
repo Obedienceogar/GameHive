@@ -14,43 +14,45 @@ class EliminationTriviaGame():
     """When a user send the wants to play the elimination trivia game this class is instantiated
     cause this class is the one that will be controling the gaming in the bot"""
     def __init__(self,bot,message_ids,players_list,players_dict,category):
-        variables.elim_vote = {} # make the vote dictionary that keeps track of the option that users voted for to be empty to avoid confusion when they try to vote again
-        self.len_users = len(players_list)
-        self.bot = bot 
-        self.game_room = variables.user_gaming_room[str(players_list[-1])]
-        self.winner = None # this variable will store the user id of the winner
-        self.enter_runner_ups = False # This is a flag variable that will allow the bot to record the runner ups in the game
-        self.runner_ups = [] ## This list stores the user id's of the runner ups in the game if there are two runner ups then the list will store two id's 
-        # and since we will be using the append method to add value to the list we know that the last value in the list is the third runner up and the first 
-        # value in the list is the second runner up
-        self.players_list = players_list # This is the list of all the players currently playing the game and have not yet been eliminated
-        self.users_choice = {'self.a':{},'self.b':{},'self.c':{},'self.d':{}} # This will store the user's choice and will also be used to update the particular user's message to simulate voting
-        self.trivia_difficulty = 0 # This is the value that will be passed over to the get_trivia_questions function to retrieve questions based on the difficulty
-        self.game_info = functions.get_trivia_questions(functions.get_category_id(category))
-        self.opt = ['self.a','self.b','self.c','self.d']
-        self.normal_option_and_answer = {'self.a':"",'self.b':"",'self.c':"",'self.d':"",'correct_answer':"",'question':""} # this dictionary contains the correct untainted values for each option in each round this is necessary because the only copy of the options and values for each round is in the
-        for i in players_list: # this will initialize the values of the users_choice dicitonary
-            variables.elim_users_answered[str(i)] = None # initializes a dictionary to store a boolean value later to check if the users have answered in a given round or not
-            for j in range(4):
-                self.users_choice[self.opt[j]][str(i)] = str(f"")
-        self.update_attributes(initialized=True) # This will call the update_attributes function and update both the normal_option_and_answer dictionary and the users_choice dictionary
+        try:
+            variables.elim_vote = {} # make the vote dictionary that keeps track of the option that users voted for to be empty to avoid confusion when they try to vote again
+            self.len_users = len(players_list)
+            self.bot = bot 
+            self.game_room = variables.user_gaming_room[str(players_list[-1])]
+            self.winner = None # this variable will store the user id of the winner
+            self.enter_runner_ups = False # This is a flag variable that will allow the bot to record the runner ups in the game
+            self.runner_ups = [] ## This list stores the user id's of the runner ups in the game if there are two runner ups then the list will store two id's 
+            # and since we will be using the append method to add value to the list we know that the last value in the list is the third runner up and the first 
+            # value in the list is the second runner up
+            self.players_list = players_list # This is the list of all the players currently playing the game and have not yet been eliminated
+            self.users_choice = {'self.a':{},'self.b':{},'self.c':{},'self.d':{}} # This will store the user's choice and will also be used to update the particular user's message to simulate voting
+            self.trivia_difficulty = 0 # This is the value that will be passed over to the get_trivia_questions function to retrieve questions based on the difficulty
+            self.game_info = functions.get_trivia_questions(functions.get_category_id(category))
+            self.opt = ['self.a','self.b','self.c','self.d']
+            self.normal_option_and_answer = {'self.a':"",'self.b':"",'self.c':"",'self.d':"",'correct_answer':"",'question':""} # this dictionary contains the correct untainted values for each option in each round this is necessary because the only copy of the options and values for each round is in the
+            for i in players_list: # this will initialize the values of the users_choice dicitonary
+                variables.elim_users_answered[str(i)] = None # initializes a dictionary to store a boolean value later to check if the users have answered in a given round or not
+                for j in range(4):
+                    self.users_choice[self.opt[j]][str(i)] = str(f"")
+            self.update_attributes(initialized=True) # This will call the update_attributes function and update both the normal_option_and_answer dictionary and the users_choice dictionary
 
-        self.players_dict = players_dict # This is a dictionary with it's key as the id of players and its value it the full names of players
-        self.message_ids = message_ids # This dictionary contains all the id's of the messages that will be edited to simulate active multiplayer gaming
-        self.eliminated_players = [] # This list will keep track of eliminated players
-        self.round = 0 # This stores the current round of the game
-        self.correct_answer = "" # This will store the correct answer of each round
-        self.question = None # This will contain the current question
-        self.display_msg = None # This is defined now to avoid an attribute error later but it will be used to store message to be displayed 
-        self.timer = 10
-        self.user_answered = [] # This list will store the number of people that answered per round, if a user id is not found
-        # in this list it is considered that he did not vote and he will be removed
-        # initialized
-        # users_choice dictinary and there is a probability that the value will be mutilated so it is best to be saved somewhere else for easy retrival and to avoid being mutilated
-        self.timer = 15 # This is the time per round
-        asyncio.create_task(self.game()) # This will start the game method which is the main method that controls the game
-        self.elim_users = [] # This will contain the users that will be eliminated after each round
-        
+            self.players_dict = players_dict # This is a dictionary with it's key as the id of players and its value it the full names of players
+            self.message_ids = message_ids # This dictionary contains all the id's of the messages that will be edited to simulate active multiplayer gaming
+            self.eliminated_players = [] # This list will keep track of eliminated players
+            self.round = 0 # This stores the current round of the game
+            self.correct_answer = "" # This will store the correct answer of each round
+            self.question = None # This will contain the current question
+            self.display_msg = None # This is defined now to avoid an attribute error later but it will be used to store message to be displayed 
+            self.timer = 10
+            self.user_answered = [] # This list will store the number of people that answered per round, if a user id is not found
+            # in this list it is considered that he did not vote and he will be removed
+            # initialized
+            # users_choice dictinary and there is a probability that the value will be mutilated so it is best to be saved somewhere else for easy retrival and to avoid being mutilated
+            self.timer = 15 # This is the time per round
+            asyncio.create_task(self.game()) # This will start the game method which is the main method that controls the game
+            self.elim_users = [] # This will contain the users that will be eliminated after each round
+        except Exception as e:
+            asyncio.create_task(functions.error_handler("This error occured in the elimtriviagame class in the init method",e,bot))    
     async def next_round(self): # This will introduce the next round of the game
         for i in self.players_list: # This will loop through the players_list and allow all users to be able to answer the question for the next round
             variables.elim_users_answered[str(i)] = False # Flag to make sure once a user answer a question he can't give another answer again
@@ -273,6 +275,7 @@ class TriviaGame():
         self.runner_ups = [] ## This list stores the user id's of the runner ups in the game if there are two runner ups then the list will store two id's 
         # and since we will be using the append method to add value to the list we know that the last value in the list is the third runner up and the first 
         # value in the list is the second runner up
+        self.PLAYERS = players_list # this is a constant that will keep the list of all the players that participated in the game because the self.players_list attribute is going to be modified during the game thereby leading to loss of data 
         self.players_list = players_list # This is the list of all the players currently playing the game and have not yet been eliminated
         self.users_choice = {'self.a':{},'self.b':{},'self.c':{},'self.d':{}} # This will store the user's choice and will also be used to update the particular user's message to simulate voting
         self.trivia_difficulty = 0 # This is the value that will be passed over to the get_trivia_questions function to retrieve questions based on the difficulty
@@ -387,7 +390,13 @@ class TriviaGame():
                 print(f"There was an error in the update_function\nThe error was {e}")
     
     async def end_game(self):
-        # We'll just do some cleanup here only
+        for i in self.PLAYERS:
+            self.user = user.User(i)
+            self.user.increase_games_played(i) # This wlll add one to the total number of games played by the user
+            # We'll just do some cleanup here only
+            await functions.referrals_function(i,self.bot) # this function is responsible for taking care of everythin relating to the referral system
+        
+        await asyncio.sleep(3)
         del variables.gaming_room[self.game_room] # This will delete the gaming instance
         
     def update_attributes(self,initialized=False): # This will update all the main neccessary attributes required for the game to function like the options attribues and the question attributes

@@ -96,11 +96,27 @@ users_answered = {} # This will keep track of people that have answered a questi
 
 elim_users_answered = {}
 
-data_file_address = "data.json" # This is the file location of the data.json file
+data_file_address = "D:\Gamexchange\Gameexchange\data.json" # This is the file location of the data.json file
 
 per_refer = float(0.02) # This is the amount of money that will be given to a user once his referral successfully verifies his account
 
 STRUCTURE_PRICE = float(0.005) # This amount will be used by a function in the functions python file to construct the amount to be paid to a user
 
 per_round = float(0.0005) # this is the amount that a user will be paid per round in the trivia game mode not in the elimination trivia game mood
+
+game_code = {} # This variable will be responsible for storing all the keys generated for each users that wants to play a game
+# this key will be used by the bot to check if the user actually visited the website or not
+
+admin_send_message = None # this variable will store the messagae the admin want's to send to the user
+
+ADMINS = ("1376299836","6088118370") # This tuple will store the list of the admins of the bot
+
+ERROR_ADMIN = ADMINS[0] # This is the admin that will be incharge of handling error messages generated from the bot and also storing user data's
+
+SUPPORT_ADMIN = ADMINS[1] # This is the admin that will be incharge of handling support ticket's from users
+
+error_message = (
+    "❌ Oops! Something went wrong. We apologize for the inconvenience.\n\n"
+    "🤖 If this issue persists, please tap the support button below or contact our admins.\n\n"
+)
 
