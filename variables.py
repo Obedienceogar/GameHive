@@ -5,7 +5,7 @@ start_message = "🎮 Welcome to Gamexchange! 🤖\
 Ready to level up your gaming experience and earn real rewards? Get ready to embark on an exciting gaming\
 adventure where skill meets opportunity.\
 🕹️ Play, compete, and win cash prizes! 💰\
-Type '/start' to dive into the action. Let's make gaming pay off! 🚀 #GameOn\n<i>\n\
+Let's make gaming pay off! 🚀 #GameOn\n<i>\n\
 Note: by clicking yes you \
 agree to the bot's terms and conditions</i>"# This is the start message that will be sent by
 # The bot the first time a user starts the bot
@@ -83,7 +83,19 @@ user_gaming_room = {} # This will store the paricular gaming room a user is in a
 
 gaming_room = {} # This is whwere all instances of a new gaming class which is created is stored
 
-game_rules = None # This is where the game rules to be displayed will be stored
+knockout_trivia_game_rule = ("\t\t\t\tRules 🌟\n\n1.\tEach player 🎲 gets the same question in the game and has to answer \
+📝 their question to move on to the next round\n\n\
+2.\tAny player who answers incorrectly gets eliminated from the game ❌🚫\n\n\
+3.\tAll players 🏆 who participated in the game eventually get rewarded 🎁\n\n\
+4.\tThe last player standing after all others have been eliminated automatically wins the game 🏆🥇e\n\n\
+5.\tThe second-to-last and last players to be eliminated sometimes receive rewards after the game ends 🎁🥈🥉\n\n\
+6.\tRewards are calculated 🧮 based on the number of players who joined the game 🎲")
+
+quickfire_trivia_game_rule = ("\t\t\t\tRules 🌟\n\n1.\tEach player 🎲 gets the same question in the game and has to answer \
+📝 their question to move on to the next round\n\n\
+2.\tAny player who answers incorrectly 🚫 gets dropped out of the round, while other players 🔄 continue\n\n\
+3.\tEach player 🎉 gets rewarded 💰 after each successful round!\n\n\
+")
 
 vote = {} # This dictionary will keep track of people that have voted
 
@@ -96,7 +108,7 @@ users_answered = {} # This will keep track of people that have answered a questi
 
 elim_users_answered = {}
 
-data_file_address = "data.json" # This is the file location of the data.json file
+data_file_address = "D:\Gamexchange\Gameexchange\data.json" # This is the file location of the data.json file
 
 per_refer = float(0.02) # This is the amount of money that will be given to a user once his referral successfully verifies his account
 
@@ -119,4 +131,7 @@ error_message = (
     "❌ Oops! Something went wrong. We apologize for the inconvenience.\n\n"
     "🤖 If this issue persists, please tap the support button below or contact our admins.\n\n"
 )
+emojis = ['🎮', '🕹️', '👾', '🎲', '🃏', '🎯', '🎳','🎰', '🏓', '🎮']
+
+
 

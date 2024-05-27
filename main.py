@@ -118,7 +118,7 @@ async def commands(message: types.Message,state: FSMContext):
             if user_status == 1:
                 pass
             else:
-                await message.answer(variables.start_message,parse_mode="HTML",reply_markup=choicekeyboardbutton,protect_content=True)
+                await message.answer(variables.start_message,parse_mode="HTML",reply_markup=choicekeyboardbutton)
                 user.add_user(inactive_users=True)
                 if referby == "":
                     pass
@@ -146,25 +146,27 @@ async def commands(message: types.Message,state: FSMContext):
                     pass
                 if variables.contvar == False:
                     variables.contvar = True
-                    msg = await bot.send_message(message.chat.id,"Creating gaming room") 
+                    msg = await bot.send_message(message.chat.id,"🕹️✨ Creating gaming room ✨🕹️") 
                     if str(message.chat.id) in waiting_room.players_list:
                         pass
                     else:
                         waiting_room.players_list.append(str(message.chat.id)) # Stringify the user's id and store it in the players list
-                        waiting_room.players_dict[str(message.chat.id)] = message.chat.full_name  
-                    await msg.edit_text("Game room created")
+                        waiting_room.players_dict[str(message.chat.id)] = message.chat.full_name 
+                        waiting_room.players_emoji[str(message.chat.id)] = random.choice(variables.emojis) # the user's special emoji will be stored in this dictionary 
+                    await msg.edit_text("🎮 Game room created 🎉")
                     await asyncio.sleep(2)
                     waiting_room.message_ids[str(message.chat.id)] = msg.message_id # this will store the message id of the joining gaming room message sent to 
                     # the user from the bot as the message will later be overwritten with the message of the waiting room
                     await functions.start_game_function(waiting_room,message.chat.id,bot)
                 else:
-                    msg_user = await bot.send_message(message.chat.id,"Joining gaming room")
+                    msg_user = await bot.send_message(message.chat.id,"🎮🚪 Joining gaming room 🚪🎮")
                     if str(message.chat.id) in waiting_room.players_list:
                         pass # this is to make sure that a user that is already in the waiting room can't enter the room again
                     else:
                         waiting_room.players_list.append(str(message.chat.id)) # Stringify the user's id and store it in the players list
-                        waiting_room.players_dict[str(message.chat.id)] = message.chat.full_name  
-                    await msg_user.edit_text("Joined")
+                        waiting_room.players_dict[str(message.chat.id)] = message.chat.full_name 
+                        waiting_room.players_emoji[str(message.chat.id)] = random.choice(variables.emojis) 
+                    await msg_user.edit_text("🤝 Joined 🤝")
                     await asyncio.sleep(2)
                     waiting_room.message_ids[str(message.chat.id)] = msg_user.message_id # this will store the message id of the joining gaming room message sent to 
                     # the user from the bot as the message will later be overwritten with the message of the waiting room
@@ -186,25 +188,27 @@ async def commands(message: types.Message,state: FSMContext):
                     pass
                 if variables.elim_contvar == False:
                     variables.elim_contvar = True
-                    msg = await bot.send_message(message.chat.id,"Creating gaming room") 
+                    msg = await bot.send_message(message.chat.id,"🕹️✨ Creating gaming room ✨🕹️") 
                     if str(message.chat.id) in elim_waiting_room.players_list:
                         pass
                     else:
                         elim_waiting_room.players_list.append(str(message.chat.id)) # Stringify the user's id and store it in the players list
-                        elim_waiting_room.players_dict[str(message.chat.id)] = message.chat.full_name  
-                    await msg.edit_text("Game room created")
+                        elim_waiting_room.players_dict[str(message.chat.id)] = message.chat.full_name 
+                        elim_waiting_room.players_emoji[str(message.chat.id)] = random.choice(variables.emojis) # gives the player his own specail emoji
+                    await msg.edit_text("🎮 Game room created 🎉")
                     await asyncio.sleep(2)
                     elim_waiting_room.message_ids[str(message.chat.id)] = msg.message_id # this will store the message id of the joining gaming room message sent to 
                     # the user from the bot as the message will later be overwritten with the message of the waiting room
                     await functions.elim_start_game_function(elim_waiting_room,message.chat.id,bot)
                 else:
-                    msg_user = await bot.send_message(message.chat.id,"Joining gaming room")
+                    msg_user = await bot.send_message(message.chat.id,"🎮🚪 Joining gaming room 🚪🎮")
                     if str(message.chat.id) in elim_waiting_room.players_list:
                         pass # this is to make sure that a user that is already in the waiting room can't enter the room again
                     else:
                         elim_waiting_room.players_list.append(str(message.chat.id)) # Stringify the user's id and store it in the players list
-                        elim_waiting_room.players_dict[str(message.chat.id)] = message.chat.full_name  
-                    await msg_user.edit_text("Joined")
+                        elim_waiting_room.players_dict[str(message.chat.id)] = message.chat.full_name 
+                        elim_waiting_room.players_emoji[str(message.chat.id)] = random.choice(variables.emojis) # gives the player his own special emoji
+                    await msg_user.edit_text("🤝 Joined 🤝")
                     await asyncio.sleep(2)
                     elim_waiting_room.message_ids[str(message.chat.id)] = msg_user.message_id # this will store the message id of the joining gaming room message sent to 
                     # the user from the bot as the message will later be overwritten with the message of the waiting room
@@ -253,7 +257,6 @@ async def kb_operations(message: types.Message,state: FSMContext):
         elif message.text == "Yes✅":
             user.add_user(user=True,inactive_users=True) # This will use the add_user method to add the user's information to both the user's list and
             # the active_user list
-            await message.answer("Would you like to stay in the loop and receive updates when we host giveaways for our users? 🎉🎁",protect_content=True)
             await message.answer("I'll be here waiting for you whenever you're ready to join our welcoming community. 🤗🌟",protect_content=True)
         elif message.text == "No❌":
             await message.answer("I'll be here waiting for you whenever you're ready to join our welcoming community. 🤗🌟",protect_content=True)
@@ -276,14 +279,14 @@ async def kb_operations(message: types.Message,state: FSMContext):
     <i>Thank you for being a part of our community! If you have any questions or need assistance, feel free to ask.</i>
     """
                 await bot.send_message(message.chat.id,accmsg,parse_mode="HTML",protect_content=True)
-                await menu(message.chat.id)
+                await menu(message.chat.id)     
             else:
                 await message.answer("⚡️ You are not a user! ⚡️\n\n🙋‍♂️ Please use the /start command to become one. 🤖",protect_content=True)
         elif message.text == "🎮Play Games": # This block of code will allow the user to play games in the bot
             await bot.send_message(message.chat.id,"🎮",protect_content=True,reply_markup=functions.return_available_games())
 
-        elif message.text == "Trivia Games":
-            messg = "Available trivia games"
+        elif message.text == "🎯 Trivia games 🎯":
+            messg = "🎮 Available trivia games 🎮"
             # a code will be generated here and stored in the game code dictionary in the variables module
             # The code will be encoded before it is passed on as a parameter to the code argument in the website link
             
@@ -293,8 +296,8 @@ async def kb_operations(message: types.Message,state: FSMContext):
             variables.game_code[str(message.chat.id)] = str(code) # this will store original code key in the variables.game_code dictionary in the variables module
             # Just incase there was a previously generated key it will be overwriten by the new key
 
-            triviathon = InlineKeyboardButton(text="Trivia Elimination",url=f'https://gamexchange.great-site.net/?code={encoded_code}&game=triviathon')
-            triviaclash = InlineKeyboardButton(text="Trivaclash",url=f'https://gamexchange.great-site.net/?code={encoded_code}&game=triviaclash')
+            triviathon = InlineKeyboardButton(text="💥 Knockout Trivia 💥",url=f'https://gamexchange.great-site.net/?code={encoded_code}&game=triviathon')
+            triviaclash = InlineKeyboardButton(text="🔥 Quickfire Trivia 🔥",url=f'https://gamexchange.great-site.net/?code={encoded_code}&game=triviaclash')
             game_options_markup = InlineKeyboardMarkup().add(triviathon).add(triviaclash)
             await bot.send_message(message.chat.id,messg,protect_content=True,reply_markup=game_options_markup)
         
@@ -308,8 +311,9 @@ async def kb_operations(message: types.Message,state: FSMContext):
     👥 <b>Referral Link:</b> {ref_link}\n\n\
     👫 <b>Valid Referrals:</b> {totalverifiedusers}\n\n\
     🚫 <b>Unverified Referrals:</b> {totalinvites}\n\n\
-    <i>Share your referral link with friends to earn more rewards and grow our community!</i>\
-    "
+    <i>Share your referral link with friends to earn more rewards and grow our community!\n\
+<b>NOTE:</b>Your referral have to play up to 5 games in other for him to be a verified user and also for you to get paid</i>\
+"
                 await bot.send_message(message.chat.id,ref_msg,parse_mode="HTML",protect_content=False)
                 await menu(message.chat.id)
             else:
@@ -356,7 +360,7 @@ async def kb_operations(message: types.Message,state: FSMContext):
                 await message.answer("⚡️ You are not a user! ⚡️\n\n🙋‍♂️ Please use the /start command to use the main menu.",protect_content=True)
         elif message.text == "💸Withdraw": # This block of code will allow the user to perform a withdrawal of his bot balance
             if user_status ==1:
-                await message.answer("💸 Minimum withdrawal amount: $1 USD",protect_content=True)
+                await message.answer("💸 Minimum withdrawal amount: $0.5 USD",protect_content=True)
                 await menu(str(message.chat.id))
             else: 
                 await message.answer("⚡️ You are not a user! ⚡️\n\n🙋‍♂️ Please use the /start command to use the main menu.",protect_content=True)
@@ -367,10 +371,9 @@ async def kb_operations(message: types.Message,state: FSMContext):
             cancelbutton = KeyboardButton('❌cancel')
             cancelkeyboardbutton = ReplyKeyboardMarkup().add(cancelbutton)
             await message.answer("Please enter a message you would like me to send to our support team 😊📩📨\n\
-    Or use the /cancel command to cancel this operation ❌🔄 or the keyboard button below to cancel this operation ⌨️❌",reply_markup=cancelkeyboardbutton,protect_content=True)
+Use the keyboard button below to cancel this operation ⌨️❌",reply_markup=cancelkeyboardbutton,protect_content=True)
             
             await Form.support_ticket.set()
-            await message.answer("Feel free to type in any questions or concerns you have about the bot, and I'll do my best to assist you! 🤖💬",parse_mode="HTML",protect_content=True)
         
         elif message.text == "❌cancel": # This block of code is runned when a user send the text cancel
             if user_status == 1: # This block of code is runned when an old user send the cancel text

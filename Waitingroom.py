@@ -18,7 +18,7 @@ import classes
 class ElimWaitingRoom:
     def __init__(self,bot):
         self.bot = bot
-        self.timer = 30
+        self.timer = 60
         self.players_list = []
         self.players_dict = {} # this is a dictinary whose key is the id of each user and the value is the full name of the user 
         self.message_ids = {} # Dictionary to store the message id of message sent to each user for referencing 
@@ -26,7 +26,9 @@ class ElimWaitingRoom:
         self.display_msg = None # This variable is initialized here so as to avoid an attribute error later in the program and also to keep track of the
         # message that will be displayed after before the game starts that is the message that will allow users to vote for the category they want 
         # questions to come out from
-        self.start_game_timer = 10
+        self.start_game_timer = 10 # I don't even know why i put this variable here because it's use case is in the vote 
+        #class it's like the timer for the voting period
+        self.players_emoji = {} # Player's special emoji will be stored here
 
     async def start_game(self,elim_waitingroom): # This function starts the game
         self.msg_ids = copy.deepcopy(self.message_ids) 
@@ -40,7 +42,7 @@ class ElimWaitingRoom:
 
         if len(self.players_list) < 2:
             reply_keyboard = functions.menu(self.players_list[0])
-            await self.bot.send_message(self.players_list[0],"Not enough players\nTry comming back later or play another game",reply_markup=reply_keyboard)
+            await self.bot.send_message(self.players_list[0],"ℹ️🕵️‍♂️ Not enough players.\n 🕵️‍♀️ Come back later or play another game 🎮ℹ️",reply_markup=reply_keyboard)
         else:
             self.vote = classes.ElimVote(self.bot,self.message_ids,self.players_list,self.players_dict,self.elim_waitingroom) # Instansiating the voting class
         
@@ -48,10 +50,10 @@ class ElimWaitingRoom:
 
     async def display_and_update_msg(self,id): # this will display the edited message to all the users
         self.count = 0
-        self.text = f"\t\tTimer: {self.timer}(s)\n\n\n"
+        self.text = f"\t\t⏱️ Timer: ⏱️: {abs(self.timer)}(s)\n\n\n"
         for i in self.players_list: # This block of code is responsible for editing the message sent to the user by the bot
             self.count += 1
-            self.text += f"{self.count}.\t{self.players_dict[i]}\n\n" # Writes a new message to the text variable
+            self.text += f"{self.count}.\t{self.players_emoji[i]+self.players_dict[i]}👥\n\n" # Writes a new message to the text variable
         self.display_msg = self.text
         self.count = 0
 
@@ -63,7 +65,7 @@ class ElimWaitingRoom:
                 pass
 
     def reset_attributes(self): # this method will reset the attributes of the waiting room class for the next instantiation
-        self.timer = 30
+        self.timer = 60
         self.players_list = []
         self.players_dict = {}
         self.message_ids = {} # Dictionary to store the message id of message sent to each user for referencing 
@@ -76,7 +78,7 @@ class ElimWaitingRoom:
 class WaitingRoom:
     def __init__(self,bot):
         self.bot = bot
-        self.timer = 30
+        self.timer = 60
         self.players_list = []
         self.players_dict = {} # this is a dictinary whose key is the id of each user and the value is the full name of the user 
         self.message_ids = {} # Dictionary to store the message id of message sent to each user for referencing 
@@ -84,7 +86,9 @@ class WaitingRoom:
         self.display_msg = None # This variable is initialized here so as to avoid an attribute error later in the program and also to keep track of the
         # message that will be displayed after before the game starts that is the message that will allow users to vote for the category they want 
         # questions to come out from
-        self.start_game_timer = 10
+        self.start_game_timer = 10 # I don't even know why i put this variable here because it's use case is in the vote 
+        #class it's like the timer for the voting period
+        self.players_emoji = {} # Player's special emoji will be stored here
 
     async def start_game(self,waitingroom): # This function starts the game
         self.msg_ids = copy.deepcopy(self.message_ids) 
@@ -102,10 +106,10 @@ class WaitingRoom:
 
     async def display_and_update_msg(self,id): # this will display the edited message to all the users
         self.count = 0
-        self.text = f"\t\tTimer: {self.timer}(s)\n\n\n"
+        self.text = f"\t\t⏱️ Timer: ⏱️: {abs(self.timer)}(s)\n\n\n"
         for i in self.players_list: # This block of code is responsible for editing the message sent to the user by the bot
             self.count += 1
-            self.text += f"{self.count}.\t{self.players_dict[i]}\n\n" # Writes a new message to the text variable
+            self.text += f"{self.count}.\t{self.players_emoji[i]+self.players_dict[i]}👥\n\n" # Writes a new message to the text variable
         self.display_msg = self.text
         self.count = 0
 

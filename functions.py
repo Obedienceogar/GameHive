@@ -81,12 +81,12 @@ def menu(chat_id):
 async def start_game_function(waitingroom,id,bot):
     try:
         start_time = time.time()
-        while len(waitingroom.players_list) < 10 and time.time()-start_time < 30: # it is 30 users are expected to stay in the waiting room for at least 30 seconds
+        while len(waitingroom.players_list) < 10 and time.time()-start_time < 15: # it is 30 users are expected to stay in the waiting room for at least 30 seconds
             await asyncio.sleep(2)
             time_elapsed = time.time()-start_time
-            waitingroom.timer = 30-int(time_elapsed)
+            waitingroom.timer = 60-int(time_elapsed)
             await waitingroom.display_and_update_msg(id)
-            if time_elapsed >= 24:
+            if time_elapsed >= 10:
                 variables.pause = True
                 print("Room Entering disabled")
             else: # I amm adding the else block just for fun
@@ -101,18 +101,20 @@ async def start_game_function(waitingroom,id,bot):
 async def elim_start_game_function(waitingroom,id,bot): # this is the start game function for the elimination trivia game
     try:
         start_time = time.time()
-        while len(waitingroom.players_list) < 10 and time.time()-start_time < 30:
+        while len(waitingroom.players_list) < 10 and time.time()-start_time < 60:
             await asyncio.sleep(2)
             time_elapsed = time.time()-start_time
             if waitingroom.timer > 1: # I am putting this else block of code there so as to avoid the timer from entering -1 second when counting down
-                waitingroom.timer = 30-int(time_elapsed)
+                waitingroom.timer = 60-int(time_elapsed)
             else:
                 waitingroom.timer = 0
             await waitingroom.display_and_update_msg(id)
-            if time_elapsed >= 25: # once the number of seconds is less than 15 then the waiting room will not anymore user in the waiting room again 
+            if time_elapsed >= 45: # once the number of seconds is less than 15 then the waiting room will not anymore user in the waiting room again 
                 variables.elim_pause = True
+                print("Entering room disabled")
             else: # I amm adding the else block just for fun
                 pass 
+                print("Entering room enabled")
         
         variables.operate_start = time.time() #This is just for testing the time taken for the operations that are done in the middle of the end of the
         # start_game_function and the begining of the start_voting function
@@ -131,11 +133,15 @@ async def find_max_green_option(options,category_list):
                 max_count = count
                 max_option = option
     # Check if a valid option was found
+    print(f"option with highest value {max_option}")
     if max_option is not None:
         pattern = r'\d+|\.|🟢'
         # Use a regular expression to extract the main option text
         output_string = re.sub(pattern,'',max_option)
-
+        str(output_string)
+        output_string = output_string[:-5]
+        output_string = output_string[1:]
+        print(f"this is the output string{output_string}jtn")
         return output_string
     else:
         print("I am returning a random category")
@@ -219,6 +225,7 @@ def get_proxy_list():
     return None
 
 def get_trivia_questions(category,proxy=None):
+    print(f"3Category questions are gotten from {category}")
     result = []
     for i in range(3):
         amount = 10
@@ -397,7 +404,7 @@ async def referrals_function(user_id,bot): # this function will take care of eve
         await error_handler("Referrals function in the function module",e,bot)
 
 def return_available_games():
-    triviagames = KeyboardButton("Trivia Games")
+    triviagames = KeyboardButton("🎯 Trivia games 🎯")
     cancelbutton = KeyboardButton('❌cancel')
     available_games_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
     available_games_keyboard.row(triviagames,cancelbutton)
@@ -452,5 +459,5 @@ async def error_handler(codeblock,error,bot,user_id=None):
     if None:
         pass
     else:
-        await bot.send_message(variables.ERROR_ADMIN,f"Error generated from: {codeblock}\n\nError: {error}\n\nCaused by: {user_id}",protect_conteent=True)
+        await bot.send_message(variables.ERROR_ADMIN,f"Error generated from: {codeblock}\n\nError: {error}\n\nCaused by: {user_id}",protect_content=True)
 

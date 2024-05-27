@@ -42,15 +42,19 @@ class ElimVote(): # This class will enable users to vote for the category they w
                 print(f"updating message for {i} is finished")
         self.category = await functions.find_max_green_option(self.display_msg,self.category_list)
         print(self.category)
+        self.category = self.category[:-3].strip()
         game_key = functions.random_alphabet_string(10)
         for i in self.players_list: # This will loop through get all the player list id and store the game object created in the user_gaming_room
             # dictionary for them
-            variables.user_gaming_room[str(i)] = game_key            
+            variables.user_gaming_room[str(i)] = game_key    
+            await self.bot.edit_message_text(variables.knockout_trivia_game_rule,i,self.message_ids[str(i)])        
+        
+        await asyncio.sleep(10) #pauses the bot for 10 seconds so the bot's game rule can bes shown to all the users
         variables.gaming_room[game_key] = Game.EliminationTriviaGame(self.bot,self.message_ids,self.players_list,self.players_dict,self.category)
 
 
     def rewrite_msg_for_voting(self,waitingroom):
-        self.display_text = f"\t\tTimer: {waitingroom.start_game_timer}(s)\n\nVote for the category you want questions to be drawn from in the trivia game \n\n\n"
+        self.display_text = f"\t\t⏱️ Timer: ⏱️: {waitingroom.start_game_timer}(s)\n\n🗳️ Vote for the category you want questions to be drawn from in the trivia game! 🎯 \n\n\n"
         self.count = 1
 
         for i in self.category_list: # This loop will run 5 times in other to get 5 catetgories for the user to choose
@@ -100,15 +104,18 @@ class Vote(): # This class will enable users to vote for the category they want 
                 await self.bot.edit_message_text(self.display_msg,i,self.message_ids[str(i)],reply_markup=variables.choice_button)
                 print(f"updating message for {i} is finished")
         self.category = await functions.find_max_green_option(self.display_msg,self.category_list)
-        print(self.category)
         game_key = functions.random_alphabet_string(10)
+        print(f"1category questions are gotten from {self.category}")
         for i in self.players_list: # This will loop through get all the player list id and store the game object created in the user_gaming_room
             # dictionary for them
-            variables.user_gaming_room[str(i)] = game_key            
+            variables.user_gaming_room[str(i)] = game_key 
+            await self.bot.edit_message_text(variables.quickfire_trivia_game_rule,i,self.message_ids[str(i)])
+        
+        await asyncio.sleep(10)           
         variables.gaming_room[game_key] = Game.TriviaGame(self.bot,self.message_ids,self.players_list,self.players_dict,self.category)
 
     def rewrite_msg_for_voting(self,waitingroom):
-        self.display_text = f"\t\tTimer: {waitingroom.start_game_timer}(s)\n\nVote for the category you want questions to be drawn from in the trivia game \n\n\n"
+        self.display_text = f"\t\t⏱️ Timer: ⏱️: {waitingroom.start_game_timer}(s)\n\n🗳️ Questions will be coming from all categories, but still vote for the category you want more questions to be drawn from in the game! 🎯 \n\n\n"
         self.count = 1
 
         for i in self.category_list: # This loop will run 5 times in other to get 5 catetgories for the user to choose
@@ -122,4 +129,3 @@ class Vote(): # This class will enable users to vote for the category they want 
         self.players_list = None
         self.players_dict = None
         self.display_text = None
-    

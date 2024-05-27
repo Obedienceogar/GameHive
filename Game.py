@@ -58,7 +58,7 @@ class EliminationTriviaGame():
             variables.elim_users_answered[str(i)] = False # Flag to make sure once a user answer a question he can't give another answer again
         self.round += 1
         for i in self.players_list:
-            await self.bot.edit_message_text(f"Round {self.round + 1}",i,self.message_ids[str(i)])
+            await self.bot.edit_message_text(f"Round 🌕✨ {self.round + 1}",i,self.message_ids[str(i)])
         await asyncio.sleep(4)
         self.user_answered = []
         self.timer = 10
@@ -78,7 +78,7 @@ class EliminationTriviaGame():
                 await self.analyze_round() # This will be responsible for determining if a player will be eliminated or not
 
                 if self.elim_users != []:
-                    self.elim_users_msg = "The following user(s) have been eliminated\n"
+                    self.elim_users_msg = "The following user(s) have been eliminated ❌👋🚫\n"
                     await asyncio.sleep(4)
                     for i in self.elim_users:# This will construct the eliminated users message to be outputed to the remaining users of the game
                         self.elim_users_msg += f"\n{self.players_dict[str(i)]}"
@@ -100,6 +100,10 @@ class EliminationTriviaGame():
             else:
                 pass 
         
+        for i in self.players_list:
+            self.user.increase_games_played
+            await self.bot.edit_message_text(f"The game has ended 🎮. Feel free to play again anytime, anywhere! 😊✨",i,self.message_ids[str(i)])
+
         await self.end_game()
         
     async def remove_user(self,id,reason): # This will remove a user from the players_list and put in the eliminated_players list and then alert 
@@ -111,17 +115,21 @@ number of players in the game {self.players_list}")
         self.popped_value = self.players_list.pop(self.index_position)
         self.eliminated_players.append(self.popped_value) # This will remove the user when the method remove_user is called
         if reason == "Wrong answer":
-            await self.bot.edit_message_text("You provided a wrong answer\nYou have been eliminated",str(id),self.message_ids[str(id)])
+            self.user = user.User(id) # increases the number of games the user has played even though he loses
+            self.user.increase_games_played(id)
+            await self.bot.edit_message_text("You provided a wrong answer ❌\n\nYou have been eliminated ❌🚫",str(id),self.message_ids[str(id)])
             await self.bot.send_message(id,"🏡",reply_markup=self.menu_keyboard)
         elif reason == "Delay":
-            await self.bot.edit_message_text("You've been eliminated because you delayed in answering",str(id),self.message_ids[str(id)])
+            self.user = user.User(id)
+            self.user.increase_games_played(id)
+            await self.bot.edit_message_text("You've been eliminated because you delayed in answering ⏰❌",str(id),self.message_ids[str(id)])
             await self.bot.send_message(id,"🏡",reply_markup=self.menu_keyboard)
         else:
             pass
 
     async def update_message(self):
-        self.msg = f"\t\tTimer:\t\t{self.timer}\n\nRound {self.round + 1}\t\t"
-        self.msg += f"\n\nQuestion: {self.normal_option_and_answer['question']}\n\n\n"
+        self.msg = f"\t\t⏱️ Timer: ⏱️\t\t{self.timer}\n\nRound 🌕✨ {self.round + 1}\t\t"
+        self.msg += f"\n\n❓💭Question:  {self.normal_option_and_answer['question']}\n\n\n"
         self.options = ['self.a','self.b','self.c','self.d']
         self.letters = ['A','B','C','D']
         for j in self.players_list:
@@ -130,8 +138,8 @@ number of players in the game {self.players_list}")
                     self.msg += f"{self.letters[i]}.\t{str(self.users_choice[option_value][str(j)])}\n\n"
 
                 await self.bot.edit_message_text(self.msg,j,self.message_ids[str(j)],reply_markup=self.generate_markup_keyboard())
-                self.msg = f"\t\tTimer:\t\t{self.timer}\n\nRound {self.round + 1}\t\t" # This resets the self.msg variable to it's original state for the next loop
-                self.msg += f"\n\nQuestion: {self.normal_option_and_answer['question']}\n\n\n"
+                self.msg = f"\t\t⏱️ Timer: ⏱️\t\t{self.timer}\n\nRound 🌕✨ {self.round + 1}\t\t" # This resets the self.msg variable to it's original state for the next loop
+                self.msg += f"\n\n❓💭Question: {self.normal_option_and_answer['question']}\n\n\n"
             except Exception as e:
                 print(f"There was an error in the update_function\nThe error was {e}")
     
@@ -145,7 +153,7 @@ number of players in the game {self.players_list}")
                 self.temp_balance = functions.elimination_construct_amount_to_be_paid(self.len_users,winner=False,no_winner=True)
                 self.user.increase_balance(self.temp_balance)
                 self.user.increase_games_played(i) # This wlll add one to the total number of games played by the user
-                await self.bot.send_message(str(i),f"You've been given ${self.temp_balance} for participating in a game")
+                await self.bot.send_message(str(i),f"You've been given ${self.temp_balance} for participating in a game 🎉💰")
                 await functions.referrals_function(i,self.bot) # this function is responsible for taking care of everythin relating to the referral system
            
         else: # incase there are no winners in the game then no error will come out when the end_game function is called
@@ -157,7 +165,7 @@ number of players in the game {self.players_list}")
             self.temp_balance = functions.elimination_construct_amount_to_be_paid(self.len_users,winner=True,no_winner=False) # This is a variable that will store the amount to be paid to the user i am doing this so i don't call the function that generate how much a user will be paid twice                
             self.user.increase_balance(self.temp_balance)
             self.user.increase_games_played(self.winner) # this will add one to the number of games played by the user
-            await self.bot.edit_message_text(f"Congrats you came first in your last game\nYour balance has been increased by ${self.temp_balance}",str(self.winner),self.message_ids[self.winner])
+            await self.bot.edit_message_text(f"Congrats you came first in your last game! 🥇🎉 Your balance has been increased by ${self.temp_balance} 💰",str(self.winner),self.message_ids[self.winner])
             await asyncio.sleep(5)
             await functions.referrals_function(self.winner,self.bot) # this function is responsible for taking care of everythin relating to the referral system
             
@@ -167,7 +175,7 @@ number of players in the game {self.players_list}")
                 self.temp_balance = functions.elimination_construct_amount_to_be_paid(self.len_users,winner=False,no_winner=False)
                 self.user.increase_balance(self.temp_balance)
                 self.user.increase_games_played(i) # this will add one to the total number of games played by the user
-                await self.bot.send_message(str(i),f"You've been given ${self.temp_balance} for participating in a game")
+                await self.bot.send_message(str(i),f"You've been awarded ${self.temp_balance} for joining the game! 🎉💰")
                 await functions.referrals_function(i,self.bot) # this function is responsible for taking care of everythin relating to the referral system
         # retrieve the game dictioary so as to delete the game class in the key's value
         del variables.gaming_room[self.game_room] # This will delete the gaming instance
@@ -269,6 +277,7 @@ class TriviaGame():
         variables.elim_vote = {} # make the vote dictionary that keeps track of the option that users voted for to be empty to avoid confusion when they try to vote again
         self.len_users = len(players_list)
         self.bot = bot 
+        self.category = category
         self.game_room = variables.user_gaming_room[str(players_list[-1])]
         self.winner = None # this variable will store the user id of the winner
         self.enter_runner_ups = False # This is a flag variable that will allow the bot to record the runner ups in the game
@@ -279,7 +288,8 @@ class TriviaGame():
         self.players_list = players_list # This is the list of all the players currently playing the game and have not yet been eliminated
         self.users_choice = {'self.a':{},'self.b':{},'self.c':{},'self.d':{}} # This will store the user's choice and will also be used to update the particular user's message to simulate voting
         self.trivia_difficulty = 0 # This is the value that will be passed over to the get_trivia_questions function to retrieve questions based on the difficulty
-        self.game_info = functions.get_trivia_questions(functions.get_category_id(category))
+        print(f"Requesting for category{self.category}")
+        self.game_info = functions.get_trivia_questions(functions.get_category_id(self.category))
         self.opt = ['self.a','self.b','self.c','self.d']
         self.normal_option_and_answer = {'self.a':"",'self.b':"",'self.c':"",'self.d':"",'correct_answer':"",'question':""} # this dictionary contains the correct untainted values for each option in each round this is necessary because the only copy of the options and values for each round is in the
         for i in players_list: # this will initialize the values of the users_choice dicitonary
@@ -312,7 +322,14 @@ class TriviaGame():
             variables.users_answered[str(i)] = False # Flag to make sure once a user answer a question he can't give another answer again
         self.round += 1
         for i in self.players_list:
-            await self.bot.edit_message_text(f"Round {self.round + 1}",i,self.message_ids[str(i)])
+            self.user=user.User(i)
+            self.user.increase_balance(self.income_per_round)# this will increase each user balance by 0.0005 each round
+            await self.bot.edit_message_text(f"🎉 Your balance has been increased by ${self.income_per_round} 💰",i,self.message_ids[str(i)])
+            await asyncio.sleep(3)
+            if not self.round>9: # this is to prevent the bot from showing round 11
+                await self.bot.edit_message_text(f"Round 🌕✨ {self.round + 1}",i,self.message_ids[str(i)])
+            else:
+                pass
         await asyncio.sleep(4)
         self.user_answered = []
         self.timer = 10
@@ -323,58 +340,53 @@ class TriviaGame():
         print(f"This is th correct answer for this round {self.correct_answer}")
     
     async def game(self): # This will keep track of the time and then call the next round method once the timer is up
-        while self.players_list:
-            self.start_time = time.time()
-            await asyncio.sleep(2)
-            self.time_elapsed = time.time()-self.start_time
-            self.timer = self.timer-int(self.time_elapsed) # this updates the timer 
-            await self.update_message() # this calls the update_message() method to edit the message to reflect changes in time and print the message to the user
-            if self.timer <= 0:
-                await self.analyze_round() # This will be responsible for determining if a player will be eliminated or not
+        while self.players_list and not self.round>9:
+            try:
+                print("Game playing")
+                self.start_time = time.time()
+                await asyncio.sleep(2)
+                self.time_elapsed = time.time()-self.start_time
+                self.timer = self.timer-int(self.time_elapsed) # this updates the timer 
+                await self.update_message() # this calls the update_message() method to edit the message to reflect changes in time and print the message to the user
+                if self.timer <= 0:
+                    await self.analyze_round() # This will be responsible for determining if a player will be eliminated or not
 
-                if self.elim_users != []:
-                    self.elim_users_msg = "The following user(s) have been eliminated\n"
-                    await asyncio.sleep(4)
-                    for i in self.elim_users:# This will construct the eliminated users message to be outputed to the remaining users of the game
-                        self.elim_users_msg += f"\n{self.players_dict[str(i)]}"
-                    # This will output the users that have been eliminated to the remaining users in the game
-                    for i in self.players_list:
-                        await self.bot.edit_message_text(self.elim_users_msg.strip(),i,self.message_ids[str(i)])
-                        await asyncio.sleep(5)
-                        self.elim_users = [] #This will empty the elim users attribute
+                    # Since in this game each user is played per each question gotten correctly by the user so the user's balance has to be 
+                    # increased before the next round of the game
+                
+                    await self.next_round()                    
                 else:
-                    pass
-                # Since in thsi game each user is played per each question gotten correctly by the user so the user's balance has to be 
-                # increased before the next round of the game
-                for i in self.players_list[:]: # by the time this loop is to be executed all the user's in the self.players_list must have answered the last question
-                    # Successfully so as to remain in the self.players_list so we will only be incrementing the balance of real players
-                    self.user = user.User(i)
-                    self.user.increase_balance(self.income_per_round) # this will increase the user's balance with the income per round attribute in the trivia game class
-                    await self.bot.edit_message_text(f"Correct ${self.income_per_round} has been added to your bot balance",i,self.message_ids[str(i)])
-                    await asyncio.sleep(3)
-
-                await self.next_round()                    
-            else:
-                pass 
-        
+                    pass 
+            except Exception as e:
+                pass
+        print("Game ended")
+        for i in self.players_list:
+            self.user.increase_games_played
+            await self.bot.edit_message_text(f"The game has ended 🎮. Feel free to play again anytime, anywhere! 😊✨",i,self.message_ids[str(i)])
+        print("About to call")
         await self.end_game()
+        print("it must have called")
         
     async def remove_user(self,id,reason): # This will remove a user from the players_list and put in the eliminated_players list and then alert 
         # The user that he has been eliminated
         self.menu_keyboard = functions.menu(id)
         self.eliminated_players.append(self.players_list.pop(self.players_list.index(str(id)))) # This will remove the user when the method remove_user is called
         if reason == "Wrong answer":
-            await self.bot.edit_message_text("You provided a wrong answer\nYou have been eliminated",str(id),self.message_ids[str(id)])
+            self.user = user.User(id)
+            self.user.increase_games_played(id)
+            await self.bot.edit_message_text("You provided a wrong answer: ❌\n\nYou have been eliminated ❌🚫",str(id),self.message_ids[str(id)])
             await self.bot.send_message(id,"🏡",reply_markup=self.menu_keyboard)
         elif reason == "Delay":
-            await self.bot.edit_message_text("You've been eliminated cause you delayed in answering",str(id),self.message_ids[str(id)])
+            self.user = user.User(id)
+            self.user.increase_games_played(id)
+            await self.bot.edit_message_text("You've been eliminated because you delayed in answering ⏰❌",str(id),self.message_ids[str(id)])
             await self.bot.send_message(id,"🏡",reply_markup=self.menu_keyboard)
         else:
             pass
 
     async def update_message(self):
-        self.msg = f"\t\tTimer:\t\t{self.timer}\n\nRound {self.round + 1}\t\t"
-        self.msg += f"\n\nQuestion: {self.normal_option_and_answer['question']}\n\n\n"
+        self.msg = f"\t\t⏱️ Timer: ⏱️\t\t{self.timer}\n\nRound 🌕✨ {self.round + 1}\t\t"
+        self.msg += f"\n\n❓💭Question: {self.normal_option_and_answer['question']}\n\n\n"
         self.options = ['self.a','self.b','self.c','self.d']
         self.letters = ['A','B','C','D']
         print(f"Hello i am from the update_message function and i am here to report that this are the total numbaer of players in this game {self.players_list}")
@@ -384,12 +396,13 @@ class TriviaGame():
                     self.msg += f"{self.letters[i]}.\t{str(self.users_choice[option_value][str(j)])}\n\n"
 
                 await self.bot.edit_message_text(self.msg,j,self.message_ids[str(j)],reply_markup=self.generate_markup_keyboard())
-                self.msg = f"\t\tTimer:\t\t{self.timer}\n\nRound {self.round + 1}\t\t" # This resets the self.msg variable to it's original state for the next loop
-                self.msg += f"\n\nQuestion: {self.normal_option_and_answer['question']}\n\n\n"
+                self.msg = f"\t\t⏱️ Timer: ⏱️\t\t{self.timer}\n\nRound 🌕✨ {self.round + 1}\t\t" # This resets the self.msg variable to it's original state for the next loop
+                self.msg += f"\n\n❓💭Question: {self.normal_option_and_answer['question']}\n\n\n"
             except Exception as e:
                 print(f"There was an error in the update_function\nThe error was {e}")
     
     async def end_game(self):
+        print("called")
         for i in self.PLAYERS:
             self.user = user.User(i)
             self.user.increase_games_played(i) # This wlll add one to the total number of games played by the user
@@ -398,6 +411,7 @@ class TriviaGame():
         
         await asyncio.sleep(3)
         del variables.gaming_room[self.game_room] # This will delete the gaming instance
+        print("done called")
         
     def update_attributes(self,initialized=False): # This will update all the main neccessary attributes required for the game to function like the options attribues and the question attributes
         # using the exec function and a for loop wasn't too effective for me to use and assign each option values so i am using this method
