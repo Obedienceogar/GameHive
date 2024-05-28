@@ -81,12 +81,12 @@ def menu(chat_id):
 async def start_game_function(waitingroom,id,bot):
     try:
         start_time = time.time()
-        while len(waitingroom.players_list) < 10 and time.time()-start_time < 15: # it is 30 users are expected to stay in the waiting room for at least 30 seconds
+        while len(waitingroom.players_list) < 10 and time.time()-start_time < 60: # it is 30 users are expected to stay in the waiting room for at least 30 seconds
             await asyncio.sleep(2)
             time_elapsed = time.time()-start_time
             waitingroom.timer = 60-int(time_elapsed)
             await waitingroom.display_and_update_msg(id)
-            if time_elapsed >= 10:
+            if time_elapsed >= 5:
                 variables.pause = True
                 print("Room Entering disabled")
             else: # I amm adding the else block just for fun
@@ -109,7 +109,7 @@ async def elim_start_game_function(waitingroom,id,bot): # this is the start game
             else:
                 waitingroom.timer = 0
             await waitingroom.display_and_update_msg(id)
-            if time_elapsed >= 45: # once the number of seconds is less than 15 then the waiting room will not anymore user in the waiting room again 
+            if time_elapsed >= 5: # once the number of seconds is less than 15 then the waiting room will not anymore user in the waiting room again 
                 variables.elim_pause = True
                 print("Entering room disabled")
             else: # I amm adding the else block just for fun
