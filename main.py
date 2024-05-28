@@ -172,6 +172,8 @@ async def commands(message: types.Message,state: FSMContext):
                     # the user from the bot as the message will later be overwritten with the message of the waiting room
             else:
                 print("invalid key")
+                await message.answer("🚫🚫 Please refrain from using previous messages to start a new gaming session. 🚫🚫\n\
+🎮🎮 Instead, initiate a new gaming session by tapping the Play Games button in the home menu. 🎮🎮")
                 await menu(str(message.chat.id)) # this will just return the main menu of the bot if the code gotten from the parameter is not correct
         except Exception as e:
             await functions.error_handler("This error is comming form the /triviaclash command block",e,bot,user_id=message.chat.id)
@@ -212,6 +214,9 @@ async def commands(message: types.Message,state: FSMContext):
                     await asyncio.sleep(2)
                     elim_waiting_room.message_ids[str(message.chat.id)] = msg_user.message_id # this will store the message id of the joining gaming room message sent to 
                     # the user from the bot as the message will later be overwritten with the message of the waiting room
+            else:
+                await message.answer("🚫🚫 Please refrain from using previous messages to start a new gaming session. 🚫🚫\n\
+🎮🎮 Instead, initiate a new gaming session by tapping the Play Games button in the home menu. 🎮🎮")
         except Exception as e:
             await functions.error_handler("Error comming from /triviathon block of code",e,bot,user_id=message.chat.id)
             await message.answer(variables.error_message)
