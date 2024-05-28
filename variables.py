@@ -108,7 +108,7 @@ users_answered = {} # This will keep track of people that have answered a questi
 
 elim_users_answered = {}
 
-data_file_address = "D:\Gamexchange\Gameexchange\data.json" # This is the file location of the data.json file
+data_file_address = "data.json" # This is the file location of the data.json file
 
 per_refer = float(0.02) # This is the amount of money that will be given to a user once his referral successfully verifies his account
 
