@@ -1,4 +1,5 @@
-﻿
+altair
+
 aiogram==2.24
 
 asyncio
