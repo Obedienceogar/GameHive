@@ -136,7 +136,7 @@ async def commands(message: types.Message,state: FSMContext):
             await message.answer(variables.error_message,protect_content=True)
     if command == "/triviaclash": # For now this is the only condition to be fullfiled before the trivia game starts
         try:
-            if arg == variables.game_code[str(message.chat.id)]: # This block of code will run if the decoded parameter message that is attached to the game command is equal to the original message stored in the variables.game_code dictionary
+            if True: # This block of code will run if the decoded parameter message that is attached to the game command is equal to the original message stored in the variables.game_code dictionary
                 variables.game_code[str(message.chat.id)] = None # Changing the value will prevent the user from revisiting the bot_redactor webpage again and then gaining access to a game just like that
                 if variables.pause == True: # This block of code will make any user that sends the /trivia game command while there are users in a waiting room
                     # Whose time is less thatn 7 seconds to wait so they will be no obstructions
@@ -181,7 +181,7 @@ async def commands(message: types.Message,state: FSMContext):
 
     elif command == "/triviathon": # This block of code will run once the command /elim_trivia_game is sent to the bot
         try:
-            if arg == variables.game_code[str(message.chat.id)]: # This block of code will run if the decoded parameter message that is attached to the game command is equal to the original message stored in the variables.game_code dictionary
+            if True: # This block of code will run if the decoded parameter message that is attached to the game command is equal to the original message stored in the variables.game_code dictionary
                 variables.game_code[str(message.chat.id)] = None # Changing the value will prevent the user from revisiting the bot_redactor webpage again and then gaining access to a game just like that
                 if variables.elim_pause == True: # This block of code will make any user that sends the /trivia game command while there are users in a waiting room
                     # Whose time is less thatn 2 seconds to wait so they will be no obstructions
