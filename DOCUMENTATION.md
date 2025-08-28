@@ -12,9 +12,8 @@
 - `data reset.py`: Script for resetting stored game or user data.
 - `data.json`: JSON file for data persistence (such as scores, questions, or user progress).
 - `functions.py`: Collection of utility functions used throughout the project.
-- `game_temp.py`: Likely handles temporary game states or quick test runs.
+- `game_temp.py`: Handled a quick test runs.
 - `main.py`: Entry point for running the application.
-- `proxy.py`: (Purpose not explicitly defined; possibly handles API or network logic.)
 - `question example.txt`: Example of question formatting or sample data for input.
 - `requirements.txt`: Lists required Python packages for the project.
 - `trivia learning.py`: Implements trivia-learning features or automated question generation.
